@@ -12,6 +12,7 @@ import dev.emrx.gitfexchange.participants.dto.CreateParticipantRequest;
 import dev.emrx.gitfexchange.participants.dto.ParticipantResponse;
 import dev.emrx.gitfexchange.participants.model.Participant;
 import dev.emrx.gitfexchange.participants.model.ParticipantService;
+import dev.emrx.gitfexchange.participants.validation.UniqueEmailValidator;
 import jakarta.validation.Valid;
 
 @RestController
@@ -21,8 +22,14 @@ public class ParticipantController {
     @Autowired
     private ParticipantService participantService;
 
+    @Autowired
+    private UniqueEmailValidator uniqueEmailValidator;
+
     @PostMapping
     public ResponseEntity<ParticipantResponse> createParticipant(@RequestBody @Valid CreateParticipantRequest request, UriComponentsBuilder uriBuilder) {
+        // Validate email uniqueness
+        uniqueEmailValidator.validate(request);
+
         // Create a new Participant object using the builder pattern
         Participant participant = Participant.builder()
             .name(request.name())
