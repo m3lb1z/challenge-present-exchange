@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import dev.emrx.gitfexchange.participants.dto.GiftRecipientResponse;
+import dev.emrx.gitfexchange.participants.dto.GiftAssignmentResponse;
 import dev.emrx.gitfexchange.participants.mapper.AssignmentMapper;
 import dev.emrx.gitfexchange.participants.model.AssignmentService;
 import dev.emrx.gitfexchange.participants.model.Participant;
@@ -36,11 +36,12 @@ public class AssignmentController {
     }
 
     @GetMapping("/notify")
-    public List<GiftRecipientResponse> assignNotifyRecipients() {
+    public List<GiftAssignmentResponse> assignNotifyRecipients() {
       List<Participant> participants = assignmentService.getParticipants();
+      participants = participants.stream().filter(participant -> participant.getGiftRecipient() != null).collect(Collectors.toList());
 
       return participants.stream()
-                         .map(participant -> assignmentMapper.toGiftRecipientResponse(participant, participant.getGiftRecipient()))
+                         .map(participant -> assignmentMapper.toGiftAssignmentResponse(participant, participant.getGiftRecipient()))
                          .collect(Collectors.toList());
     }
     
