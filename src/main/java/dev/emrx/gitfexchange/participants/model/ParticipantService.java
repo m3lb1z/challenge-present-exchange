@@ -14,4 +14,9 @@ public class ParticipantService {
     public Participant addParticipant(Participant participant) {
         return participantRepository.save(participant);
     }
+
+    @Transactional(readOnly = true)
+    public Iterable<Participant> getAllParticipants() {
+        return participantRepository.findAll();
+    }
 }
