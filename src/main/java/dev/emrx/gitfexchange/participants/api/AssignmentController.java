@@ -1,0 +1,47 @@
+package dev.emrx.gitfexchange.participants.api;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import dev.emrx.gitfexchange.participants.dto.GiftRecipientResponse;
+import dev.emrx.gitfexchange.participants.mapper.AssignmentMapper;
+import dev.emrx.gitfexchange.participants.model.AssignmentService;
+import dev.emrx.gitfexchange.participants.model.Participant;
+
+import org.springframework.web.bind.annotation.GetMapping;
+
+
+@RestController
+@RequestMapping("/assignments")
+public class AssignmentController {
+
+    private AssignmentService assignmentService;
+    private AssignmentMapper assignmentMapper;
+
+    public AssignmentController(AssignmentService assignmentService, AssignmentMapper assignmentMapper) {
+        this.assignmentService = assignmentService;
+        this.assignmentMapper = assignmentMapper;
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.OK)
+    public void assignGiftRecipients() {
+        assignmentService.assignGiftRecipients();
+    }
+
+    @GetMapping("/notify")
+    public List<GiftRecipientResponse> assignNotifyRecipients() {
+      List<Participant> participants = assignmentService.getParticipants();
+
+      return participants.stream()
+                         .map(participant -> assignmentMapper.toGiftRecipientResponse(participant, participant.getGiftRecipient()))
+                         .collect(Collectors.toList());
+    }
+    
+}

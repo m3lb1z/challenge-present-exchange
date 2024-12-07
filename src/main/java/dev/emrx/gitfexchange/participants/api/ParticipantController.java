@@ -18,7 +18,6 @@ import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @RestController
 @RequestMapping("/participants")
@@ -50,10 +49,10 @@ public class ParticipantController {
 
     @GetMapping
     public ResponseEntity<List<ParticipantResponse>> listParticipants() {
-        Iterable<Participant> participants = participantService.getAllParticipants();
-        List<ParticipantResponse> responses = StreamSupport.stream(participants.spliterator(), false)
-                .map(participantMapper::toParticipantResponse)
-                .collect(Collectors.toList());
+        List<Participant> participants = participantService.getAllParticipants();
+        List<ParticipantResponse> responses = participants.stream()
+                                                          .map(participantMapper::toParticipantResponse)
+                                                          .collect(Collectors.toList());
         return ResponseEntity.ok(responses);
     }
 }

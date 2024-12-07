@@ -1,14 +1,19 @@
 package dev.emrx.gitfexchange.participants.model;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ParticipantService {
 
-    @Autowired
     private ParticipantRepository participantRepository;
+
+    public ParticipantService(ParticipantRepository participantRepository) {
+        this.participantRepository = participantRepository;
+    }
 
     @Transactional
     public Participant addParticipant(Participant participant) {
@@ -16,7 +21,9 @@ public class ParticipantService {
     }
 
     @Transactional(readOnly = true)
-    public Iterable<Participant> getAllParticipants() {
-        return participantRepository.findAll();
+    public List<Participant> getAllParticipants() {
+        List<Participant> participants = new ArrayList<>();
+        participantRepository.findAll().forEach(participants::add);
+        return participants;
     }
 }
