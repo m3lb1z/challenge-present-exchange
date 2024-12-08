@@ -59,7 +59,7 @@ public class AssignmentService {
     private void _sendAssignmentEmail(Participant giver, Participant recipient) {
         String subject = "Your Gift Exchange Assignment";
         // String body = "Hello " + giver.getName() + ", you have been assigned to buy a gift for " + recipient.getName() + ".";
-        emailService.sendGiftEmail(giver.getEmail(), subject, recipient.getName());
+        emailService.sendEmailFromNotifyDraw(giver.getEmail(), subject, recipient.getName());
     }
 
     @Transactional(readOnly = true)
