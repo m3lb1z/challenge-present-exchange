@@ -35,8 +35,8 @@ public class AssignmentController {
         assignmentService.assignGiftRecipients();
     }
 
-    @GetMapping("/notify")
-    public List<GiftAssignmentResponse> assignNotifyRecipients() {
+    @GetMapping("/list")
+    public List<GiftAssignmentResponse> assignListRecipients() {
       List<Participant> participants = assignmentService.getParticipants();
       participants = participants.stream().filter(participant -> participant.getGiftRecipient() != null).collect(Collectors.toList());
 

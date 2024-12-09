@@ -16,9 +16,6 @@ import dev.emrx.gitfexchange.participants.mapper.ParticipantMapper;
 import dev.emrx.gitfexchange.participants.validation.UniqueEmailValidator;
 import jakarta.validation.Valid;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @RestController
 @RequestMapping("/participants")
 public class ParticipantController {
@@ -45,14 +42,5 @@ public class ParticipantController {
         // Build the URI for the newly created resource
         return ResponseEntity.created(uriBuilder.path("/participants/{id}").buildAndExpand(savedParticipant.getId()).toUri())
                              .body(response);
-    }
-
-    @GetMapping
-    public ResponseEntity<List<ParticipantResponse>> listParticipants() {
-        List<Participant> participants = participantService.getAllParticipants();
-        List<ParticipantResponse> responses = participants.stream()
-                                                          .map(participantMapper::toParticipantResponse)
-                                                          .collect(Collectors.toList());
-        return ResponseEntity.ok(responses);
     }
 }
