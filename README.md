@@ -84,3 +84,11 @@ La **Gift Exchange API** es una aplicación diseñada para facilitar el intercam
 La API proporciona puntos finales para gestionar el intercambio de regalos. A continuación se muestran los puntos finales disponibles y sus formatos de solicitud/respuesta esperados.
 
 [Documentación Gift Exchange API](https://m3lb1z.github.io/challenge-gift-exchange/)
+
+## Ejemplos del envio de mensajes
+
+A continuación se muestran ejemplos de la plantilla de mensaje configurado por JavaMail:
+
+![Registro del participante](./docs/img/registry-participant.png)
+
+![Sorteo de amigo secreto](./docs/img/gift-participant.png)
