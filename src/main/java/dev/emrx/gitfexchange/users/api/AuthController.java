@@ -24,10 +24,11 @@ import dev.emrx.gitfexchange.users.model.UserRole;
 import dev.emrx.gitfexchange.users.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping("/auth")
-@Tag(name = "Authentication")
+@Tag(name = "Autenticación")
 public class AuthController {
   
     private final UserService userService;
@@ -40,6 +41,7 @@ public class AuthController {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
+    @Operation(summary = "Registrar un nuevo usuario")
     @PostMapping("/register")
     public ResponseEntity<UserResponse> save(@RequestBody @Valid RegisterUserRequest userRequest, UriComponentsBuilder uriBuilder) {
 
@@ -63,6 +65,7 @@ public class AuthController {
                 .toUri()).body(userResponse);
     }
 
+    @Operation(summary = "Iniciar sesión con un usuario existente")
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest loginDTO){
         Authentication authDTO = new UsernamePasswordAuthenticationToken(loginDTO.username(), loginDTO.password());

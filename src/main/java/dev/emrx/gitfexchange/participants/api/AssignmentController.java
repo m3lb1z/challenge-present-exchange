@@ -15,6 +15,7 @@ import dev.emrx.gitfexchange.participants.model.Participant;
 import dev.emrx.gitfexchange.participants.service.AssignmentService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RestController
 @RequestMapping("/assignments")
 @SecurityRequirement(name = "bearer-key")
-@Tag(name = "Assignments")
+@Tag(name = "Asignaciones")
 public class AssignmentController {
 
     private AssignmentService assignmentService;
@@ -33,12 +34,16 @@ public class AssignmentController {
         this.assignmentMapper = assignmentMapper;
     }
 
+    @Operation(summary = "Asignar destinatarios de regalos aleatoriamente", 
+              description = "Asigna aleatoriamente destinatarios de regalos a todos los participantes del intercambio")
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
     public void assignGiftRecipients() {
         assignmentService.assignRandomGiftRecipients();
     }
 
+    @Operation(summary = "Listar todas las asignaciones de regalos", 
+              description = "Devuelve una lista de todos los participantes y sus destinatarios de regalos asignados")
     @GetMapping("/list")
     public List<GiftRecipientResponse> listGiftRecipients() {
       List<Participant> participants = assignmentService.listGiftRecipients();

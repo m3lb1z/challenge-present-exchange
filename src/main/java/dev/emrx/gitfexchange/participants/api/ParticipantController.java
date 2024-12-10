@@ -22,11 +22,12 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping("/participants")
 @SecurityRequirement(name = "bearer-key")
-@Tag(name = "Participants")
+@Tag(name = "Participantes")
 public class ParticipantController {
   
     private ParticipantService participantService;
@@ -39,6 +40,8 @@ public class ParticipantController {
         this.participantMapper = participantMapper;
     }
 
+    @Operation(summary = "Registrar nuevo participante", 
+              description = "Permite a un usuario registrarse como participante en el intercambio de regalos")
     @PostMapping("/register")
     public ResponseEntity<ParticipantResponse> registerParticipant(@RequestBody @Valid RegisterParticipantRequest request, UriComponentsBuilder uriBuilder) {
         uniqueEmailValidator.validate(request);
@@ -57,6 +60,8 @@ public class ParticipantController {
     }
 
 
+    @Operation(summary = "Obtener participante asignado", 
+              description = "Obtiene la información del participante al que se le debe entregar un regalo")
     @GetMapping("/assigned")
     public ResponseEntity<GiftRecipientResponse> assignedParticipant() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
