@@ -11,4 +11,7 @@ import java.util.Optional;
 public interface ParticipantRepository extends CrudRepository<Participant, Long> {
     Optional<Participant> findByEmail(String email);
     Optional<Participant> findByUser(User user);
+
+    boolean existsByEmail(String email);
+    boolean existsByUser(User user);
 }

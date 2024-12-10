@@ -8,6 +8,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import dev.emrx.gitfexchange.users.listener.UserEntityListener;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -18,6 +20,7 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "users")
+@EntityListeners(UserEntityListener.class)
 public class User implements UserDetails {
 
     @Id

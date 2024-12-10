@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import dev.emrx.gitfexchange.participants.dto.CreateParticipantRequest;
+import dev.emrx.gitfexchange.participants.dto.RegisterParticipantRequest;
 import dev.emrx.gitfexchange.participants.dto.GiftRecipientResponse;
 import dev.emrx.gitfexchange.participants.dto.ParticipantResponse;
 import dev.emrx.gitfexchange.participants.model.Participant;
@@ -21,6 +21,7 @@ import dev.emrx.gitfexchange.participants.validation.UniqueEmailValidator;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.ValidationException;
 
 @RestController
 @RequestMapping("/participants")
@@ -38,11 +39,15 @@ public class ParticipantController {
         this.participantMapper = participantMapper;
     }
 
-    @PostMapping
-    public ResponseEntity<ParticipantResponse> createParticipant(@RequestBody @Valid CreateParticipantRequest request, UriComponentsBuilder uriBuilder) {
+    @PostMapping("/register")
+    public ResponseEntity<ParticipantResponse> registerParticipant(@RequestBody @Valid RegisterParticipantRequest request, UriComponentsBuilder uriBuilder) {
         uniqueEmailValidator.validate(request);
-
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        if (participantService.existsParticipantByUsername(username)) {
+            throw new ValidationException(username + " ya se registro como participante");
+        }
+
         Participant participant = participantMapper.toParticipant(request);
         Participant savedParticipant = participantService.createParticipant(username, participant);
         ParticipantResponse response = participantMapper.toParticipantResponse(savedParticipant);
@@ -53,7 +58,7 @@ public class ParticipantController {
 
 
     @GetMapping("/assigned")
-    public ResponseEntity<GiftRecipientResponse> infoParticipant() {
+    public ResponseEntity<GiftRecipientResponse> assignedParticipant() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Optional<Participant> participantOptional = participantService.getParticipantByUsername(username);
 
@@ -61,7 +66,11 @@ public class ParticipantController {
             return ResponseEntity.notFound().build();
         }
         Participant participant = participantOptional.get();
+        
+        if (participant.getGiftRecipient() == null) {
+            throw new ValidationException("Todavia no se ha asignado un destinatario de regalo");
+        }
 
-        return ResponseEntity.ok(new GiftRecipientResponse(participant.getName(), participant.getEmail(), participant.getGiftRecipient() != null ?  participant.getGiftRecipient().getName() : ""));
+        return ResponseEntity.ok(new GiftRecipientResponse(participant.getName(), participant.getEmail(), participant.getGiftRecipient().getName()));
     }
 }

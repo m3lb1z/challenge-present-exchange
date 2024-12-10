@@ -1,6 +1,6 @@
 package dev.emrx.gitfexchange.participants.mapper;
 
-import dev.emrx.gitfexchange.participants.dto.CreateParticipantRequest;
+import dev.emrx.gitfexchange.participants.dto.RegisterParticipantRequest;
 import dev.emrx.gitfexchange.participants.dto.ParticipantResponse;
 import dev.emrx.gitfexchange.participants.model.Participant;
 import org.springframework.stereotype.Component;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ParticipantMapper {
 
-    public Participant toParticipant(CreateParticipantRequest request) {
+    public Participant toParticipant(RegisterParticipantRequest request) {
         return Participant.builder()
                 .name(request.name())
                 .email(request.email())

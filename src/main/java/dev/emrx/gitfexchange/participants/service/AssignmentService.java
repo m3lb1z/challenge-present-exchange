@@ -1,5 +1,6 @@
 package dev.emrx.gitfexchange.participants.service;
 
+import org.hibernate.boot.beanvalidation.IntegrationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +29,7 @@ public class AssignmentService {
         participantRepository.findAll().forEach(participants::add);
 
         if (participants.size() <= 2) {
-            throw new IllegalStateException("El número de participantes debe ser mayor a 2 para realizar asignaciones.");
+            throw new IntegrationException("El número de participantes debe ser mayor a 2 para realizar asignaciones.");
         }
 
         List<Long> participantIds = participants.stream()
@@ -48,7 +49,7 @@ public class AssignmentService {
             }
 
             if (recipientId == null) {
-                throw new IllegalStateException("No se encontró un destinatario válido para el participante con ID: " + giver.getId());
+                throw new IntegrationException("No se encontró un destinatario válido para el participante con ID: " + giver.getId());
             }
 
             participantIds.remove(recipientId);

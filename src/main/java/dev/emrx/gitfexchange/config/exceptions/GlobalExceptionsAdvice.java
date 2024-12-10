@@ -2,6 +2,7 @@ package dev.emrx.gitfexchange.config.exceptions;
 
 import java.util.List;
 
+import org.hibernate.boot.beanvalidation.IntegrationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,6 +21,11 @@ public class GlobalExceptionsAdvice {
 
   @ExceptionHandler(ValidationException.class)
   public ResponseEntity<String> handleValidationException(ValidationException ex) {
+      return ResponseEntity.badRequest().body(ex.getMessage());
+  }
+
+  @ExceptionHandler(IntegrationException.class)
+  public ResponseEntity<String> handleIntegrationException(IntegrationException ex) {
       return ResponseEntity.badRequest().body(ex.getMessage());
   }
 

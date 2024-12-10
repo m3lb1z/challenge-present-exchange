@@ -1,4 +1,10 @@
 package dev.emrx.gitfexchange.users.dto;
 
-public record LoginRequest(String username, String password) {
+import jakarta.validation.constraints.NotBlank;
+
+public record LoginRequest(
+  @NotBlank(message = "Username no puede estar en blanco")
+  String username,
+  @NotBlank(message = "Password no puede estar en blanco") 
+  String password) {
 }

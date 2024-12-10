@@ -55,4 +55,13 @@ public class ParticipantService {
         participantRepository.findAll().forEach(participants::add);
         return participants;
     }
+
+    @Transactional(readOnly = true)
+    public boolean existsParticipantByUsername(String username) {
+        User user = userRepository.findByUsername(username).orElse(null);
+        if (user == null) {
+            return false;
+        }
+        return participantRepository.existsByUser(user);
+    }
 }
