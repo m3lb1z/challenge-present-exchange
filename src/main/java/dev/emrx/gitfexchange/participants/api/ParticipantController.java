@@ -19,11 +19,13 @@ import dev.emrx.gitfexchange.participants.service.ParticipantService;
 import dev.emrx.gitfexchange.participants.mapper.ParticipantMapper;
 import dev.emrx.gitfexchange.participants.validation.UniqueEmailValidator;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/participants")
 @SecurityRequirement(name = "bearer-key")
+@Tag(name = "Participants")
 public class ParticipantController {
   
     private ParticipantService participantService;
@@ -60,6 +62,6 @@ public class ParticipantController {
         }
         Participant participant = participantOptional.get();
 
-        return ResponseEntity.ok(new GiftRecipientResponse(participant.getName(), participant.getEmail(), participant.getGiftRecipient().getName()));
+        return ResponseEntity.ok(new GiftRecipientResponse(participant.getName(), participant.getEmail(), participant.getGiftRecipient() != null ?  participant.getGiftRecipient().getName() : ""));
     }
 }

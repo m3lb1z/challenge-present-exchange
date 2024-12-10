@@ -1,6 +1,8 @@
 package dev.emrx.gitfexchange.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
@@ -13,6 +15,12 @@ public class SpringDocConfig {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
+            .components(new Components()
+                .addSecuritySchemes("bearer-key",
+                    new SecurityScheme()
+                        .type(SecurityScheme.Type.HTTP)
+                        .scheme("bearer")
+                        .bearerFormat("JWT")))
             .info(new Info()
                 .title("Gift Exchange API")
                 .description("API para registrar participantes en el juego de intercambio de regalos por Nochebuena. " +

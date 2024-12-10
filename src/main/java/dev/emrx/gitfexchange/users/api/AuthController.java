@@ -18,9 +18,11 @@ import dev.emrx.gitfexchange.users.dto.RegisterUserRequest;
 import dev.emrx.gitfexchange.users.model.User;
 import dev.emrx.gitfexchange.users.model.UserRole;
 import dev.emrx.gitfexchange.users.service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/auth")
+@Tag(name = "Authentication")
 public class AuthController {
   
     private final UserService userService;

@@ -27,7 +27,8 @@ public class SecurityConfig {
         "/webjars/**",
         "/login",
         "/h2-console/**",
-        "/auth/**"
+        "/auth/**",
+        "/swagger-ui.html"
     };
 
     @Autowired

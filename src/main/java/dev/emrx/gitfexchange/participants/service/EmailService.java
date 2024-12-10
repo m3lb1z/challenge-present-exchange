@@ -2,8 +2,8 @@ package dev.emrx.gitfexchange.participants.service;
 
 import java.util.List;
 
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Aspect;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -15,17 +15,19 @@ import dev.emrx.gitfexchange.participants.model.Participant;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
-@Aspect
 @Service
 public class EmailService {
 
-    @Value("${spring.mail.username}")
-    private String from;
+    
+    Logger log = LoggerFactory.getLogger(this.getClass()); 
+
     private final JavaMailSender mailSender;
     private final SpringTemplateEngine engine;
+    @Value("${spring.mail.username}")
+    private String from;
 
-    public EmailService(JavaMailSender javaMailSender, SpringTemplateEngine engine) {
-        this.mailSender = javaMailSender;
+    public EmailService(JavaMailSender mailSender, SpringTemplateEngine engine) {
+        this.mailSender = mailSender;
         this.engine = engine;
     }
 
@@ -50,16 +52,14 @@ public class EmailService {
         }
     }
 
-    @AfterReturning(pointcut = "execution(* dev.emrx.gitfexchange.participants.model.ParticipantService.addParticipant(..))", returning = "participant")
     public void sendEmailFromRegistry(Participant participant) {
         Context context = new Context();
         context.setVariable("name", participant.getName());
-
+        log.info(participant.getEmail());
         String content = engine.process("mail/registry-participant", context);
         sendEmail(participant.getEmail(), "¡Gracias por registrarte al intercambio de regalos!", content, false, true);
     }
   
-    @AfterReturning(pointcut = "execution(* dev.emrx.gitfexchange.participants.model.ParticipantService.assignRandomGiftRecipients(..))", returning = "participants")
     public void sendEmailFromNotifyDraw(List<Participant> participants) {
         String subject = "Your Gift Exchange Assignment";
         for (Participant giver : participants) {
@@ -71,7 +71,7 @@ public class EmailService {
     private void _sendEmailFromNotifyDraw(String to, String subject, String sender) {
         Context context = new Context();
         context.setVariable("sender", sender);
-
+        log.info(String.format("%s %s %s", to, subject, sender));
         String content = engine.process("mail/gift-participant", context);
         sendEmail(to, subject, content, false, true);
     }

@@ -14,14 +14,16 @@ import java.util.stream.Collectors;
 @Service
 public class AssignmentService {
 
-    private ParticipantRepository participantRepository;
+    private final ParticipantRepository participantRepository;
+    private final EmailService emailService;
 
-    public AssignmentService(ParticipantRepository participantRepository) {
+    public AssignmentService(ParticipantRepository participantRepository, EmailService emailService) {
         this.participantRepository = participantRepository;
+        this.emailService = emailService;
     }
 
     @Transactional
-    public List<Participant> assignRandomGiftRecipients() {
+    public void assignRandomGiftRecipients() {
         List<Participant> participants = new ArrayList<>();
         participantRepository.findAll().forEach(participants::add);
 
@@ -57,7 +59,7 @@ public class AssignmentService {
         var savedParticipants = participantRepository.saveAll(participants);
         List<Participant> participantList = new ArrayList<>();
         savedParticipants.forEach(participantList::add);
-        return participantList;
+        emailService.sendEmailFromNotifyDraw(participantList);
     }
 
     @Transactional(readOnly = true)

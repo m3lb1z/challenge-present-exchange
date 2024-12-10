@@ -14,6 +14,7 @@ import dev.emrx.gitfexchange.participants.mapper.AssignmentMapper;
 import dev.emrx.gitfexchange.participants.model.Participant;
 import dev.emrx.gitfexchange.participants.service.AssignmentService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RestController
 @RequestMapping("/assignments")
 @SecurityRequirement(name = "bearer-key")
+@Tag(name = "Assignments")
 public class AssignmentController {
 
     private AssignmentService assignmentService;

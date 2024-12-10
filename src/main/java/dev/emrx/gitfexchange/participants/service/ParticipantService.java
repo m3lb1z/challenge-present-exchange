@@ -17,10 +17,12 @@ public class ParticipantService {
 
     private final ParticipantRepository participantRepository;
     private final UserRepository userRepository;
+    private final EmailService emailService;
 
-    public ParticipantService(ParticipantRepository participantRepository, UserRepository userRepository) {
+    public ParticipantService(ParticipantRepository participantRepository, UserRepository userRepository, EmailService emailService) {
         this.participantRepository = participantRepository;
         this.userRepository = userRepository;
+        this.emailService = emailService;
     }
 
     @Transactional(readOnly = true)
@@ -42,6 +44,8 @@ public class ParticipantService {
         }
 
         participant.setUser(user.get());
+        emailService.sendEmailFromRegistry(participant);
+        
         return participantRepository.save(participant);
     }
 
