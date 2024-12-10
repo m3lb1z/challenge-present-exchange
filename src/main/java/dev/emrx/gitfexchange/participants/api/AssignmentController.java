@@ -9,16 +9,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import dev.emrx.gitfexchange.participants.dto.GiftAssignmentResponse;
+import dev.emrx.gitfexchange.participants.dto.GiftRecipientResponse;
 import dev.emrx.gitfexchange.participants.mapper.AssignmentMapper;
-import dev.emrx.gitfexchange.participants.model.AssignmentService;
 import dev.emrx.gitfexchange.participants.model.Participant;
+import dev.emrx.gitfexchange.participants.service.AssignmentService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 import org.springframework.web.bind.annotation.GetMapping;
 
 
 @RestController
 @RequestMapping("/assignments")
+@SecurityRequirement(name = "bearer-key")
 public class AssignmentController {
 
     private AssignmentService assignmentService;
@@ -32,12 +34,12 @@ public class AssignmentController {
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
     public void assignGiftRecipients() {
-        assignmentService.assignGiftRecipients();
+        assignmentService.assignRandomGiftRecipients();
     }
 
     @GetMapping("/list")
-    public List<GiftAssignmentResponse> assignListRecipients() {
-      List<Participant> participants = assignmentService.getParticipants();
+    public List<GiftRecipientResponse> listGiftRecipients() {
+      List<Participant> participants = assignmentService.listGiftRecipients();
       participants = participants.stream().filter(participant -> participant.getGiftRecipient() != null).collect(Collectors.toList());
 
       return participants.stream()

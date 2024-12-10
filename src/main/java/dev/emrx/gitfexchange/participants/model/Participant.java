@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
+import dev.emrx.gitfexchange.users.model.User;
+
 @Entity
 @Table(name = "participants")
 @Data
@@ -26,12 +28,11 @@ public class Participant {
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", unique = true)
+    private User user;
+
     @ManyToOne
     @JoinColumn(name = "gift_recipient_id")
     private Participant giftRecipient;
-
-    // @PrePersist
-    // protected void onCreate() {
-    //     this.createdAt = LocalDateTime.now();
-    // }
 }

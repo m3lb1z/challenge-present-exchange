@@ -30,20 +30,20 @@ public class JwtTokenProvider {
     private Long jwtDurationSeconds;
 
     public String generateToken(Authentication authentication) {
-    User user = (User) authentication.getPrincipal();
-    SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+        User user = (User) authentication.getPrincipal();
+        SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
 
-    return Jwts.builder()
-            .header()
-                .type("JWT")
-                .and()
-            .subject(Long.toString(user.getId()))
-            .issuedAt(new Date())
-            .expiration(new Date(System.currentTimeMillis() + (jwtDurationSeconds * 1000)))
-            .claim("username", user.getUsername())
-            .claim("email", user.getEmail())
-            .signWith(key, Jwts.SIG.HS256)  // Changed from RS256 to HS256 to match the key type
-            .compact();
+        return Jwts.builder()
+                .header()
+                    .type("JWT")
+                    .and()
+                .subject(Long.toString(user.getId()))
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + (jwtDurationSeconds * 1000)))
+                .claim("username", user.getUsername())
+                .claim("email", user.getEmail())
+                .signWith(key, Jwts.SIG.HS256)  // Changed from RS256 to HS256 to match the key type
+                .compact();
     }
 
     public boolean isValidToken(String token) {

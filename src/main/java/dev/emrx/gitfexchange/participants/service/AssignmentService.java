@@ -1,7 +1,10 @@
-package dev.emrx.gitfexchange.participants.model;
+package dev.emrx.gitfexchange.participants.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import dev.emrx.gitfexchange.participants.model.Participant;
+import dev.emrx.gitfexchange.participants.model.ParticipantRepository;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,15 +15,13 @@ import java.util.stream.Collectors;
 public class AssignmentService {
 
     private ParticipantRepository participantRepository;
-    private EmailService emailService;
 
-    public AssignmentService(ParticipantRepository participantRepository, EmailService emailService) {
+    public AssignmentService(ParticipantRepository participantRepository) {
         this.participantRepository = participantRepository;
-        this.emailService = emailService;
     }
 
     @Transactional
-    public void assignGiftRecipients() {
+    public List<Participant> assignRandomGiftRecipients() {
         List<Participant> participants = new ArrayList<>();
         participantRepository.findAll().forEach(participants::add);
 
@@ -53,28 +54,17 @@ public class AssignmentService {
             giver.setGiftRecipient(recipient);
         }
 
-        participantRepository.saveAll(participants);
-    }
-
-    private void _sendAssignmentEmail(Participant giver, Participant recipient) {
-        String subject = "Your Gift Exchange Assignment";
-        // String body = "Hello " + giver.getName() + ", you have been assigned to buy a gift for " + recipient.getName() + ".";
-        emailService.sendEmailFromNotifyDraw(giver.getEmail(), subject, recipient.getName());
+        var savedParticipants = participantRepository.saveAll(participants);
+        List<Participant> participantList = new ArrayList<>();
+        savedParticipants.forEach(participantList::add);
+        return participantList;
     }
 
     @Transactional(readOnly = true)
-    public List<Participant> getParticipants() {
+    public List<Participant> listGiftRecipients() {
         List<Participant> participants = new ArrayList<>();
         participantRepository.findAll().forEach(participants::add);
-
-        if(!participants.isEmpty()) {
-            for(Participant participant : participants) {
-                if(participant.getGiftRecipient() != null) {
-                    _sendAssignmentEmail(participant, participant.getGiftRecipient());
-                }
-            }
-        }
-
+ 
         return participants;
     }
 }
