@@ -83,7 +83,7 @@ La **Gift Exchange API** es una aplicación diseñada para facilitar el intercam
 
 La API proporciona puntos finales para gestionar el intercambio de regalos. A continuación se muestran los puntos finales disponibles y sus formatos de solicitud/respuesta esperados.
 
-[Documentación Gift Exchange API](https://m3lb1z.github.io/challenge-gift-exchange/)
+[Documentación Gift Exchange API](https://m3lb1z.github.io/challenge-present-exchange/)
 
 ## Ejemplos del envio de mensajes
 
